@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Clock</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+        }
+        .clock {
+            width: 200px;
+            height: 200px;
+            border: 10px solid white;
+            border-radius: 50%;
+            position: relative;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .number, .mark {
+            position: absolute;
+            color: white;
+            font-weight: bold;
+        }
+        .number {
+            font-size: 16px;
+        }
+        .mark {
+            width: 2px;
+            height: 6px;
+            background: white;
+        }
+        .hand {
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: white;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: transform 0.05s linear;
+        }
+        .hour {
+            height: 6px;
+            width: 35%;
+            left: 15%;
+        }
+        .minute {
+            height: 4px;
+            width: 45%;
+            left: 5%;
+        }
+        .second {
+            height: 2px;
+            width: 50%;
+            background: red;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="hand hour" id="hour"></div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+        <script>
+            for (let i = 1; i <= 12; i++) {
+                let angle = (i * 30) * (Math.PI / 180);
+                let x = 50 + 40 * Math.sin(angle);
+                let y = 50 - 40 * Math.cos(angle);
+                document.write(`<div class='number' style='left:${x}%; top:${y}%; transform:translate(-50%, -50%);'>${i}</div>`);
+            }
+            for (let i = 0; i < 60; i++) {
+                let angle = (i * 6) * (Math.PI / 180);
+                let x = 50 + 45 * Math.sin(angle);
+                let y = 50 - 45 * Math.cos(angle);
+                let size = i % 5 === 0 ? '4px' : '2px';
+                let length = i % 5 === 0 ? '10px' : '6px';
+                document.write(`<div class='mark' style='left:${x}%; top:${y}%; width:${size}; height:${length}; transform:translate(-50%, -50%);'></div>`);
+            }
+        </script>
+    </div>
+    <script>
+        function updateClock() {
+            let now = new Date();
+            let hours = now.getHours() % 12;
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let hourDeg = (hours * 30) + (0.5 * minutes);
+            let minuteDeg = (minutes * 6) + (0.1 * seconds);
+            let secondDeg = seconds * 6;
+            document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
+            document.getElementById('second').style.transform = `rotate(${secondDeg}deg)`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
